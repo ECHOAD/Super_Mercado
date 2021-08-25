@@ -1,0 +1,71 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IAuthorizationService authorizationService
+
+
+
+<AuthorizeView>
+	<Authorized>
+
+
+		<MudNavLink OnClick="Logout" Icon="@Icons.Material.Outlined.People" IconColor="Color.Primary">Cerrar Sesion</MudNavLink>
+
+		<MudNavLink Href="usuario/configuracion" Icon="@Icons.Material.Outlined.Settings" IconColor="Color.Secondary">Configuracion </MudNavLink>
+
+
+	</Authorized>
+	<NotAuthorized>
+
+		<MudNavLink Href="login" Icon="@Icons.Material.Outlined.People" IconColor="Color.Primary">Iniciar Sesion</MudNavLink>
+
+		<MudNavLink Href="registrarse" Icon="@Icons.Material.Outlined.Login" IconColor="Color.Warning">Registrarse</MudNavLink>
+
+
+
+
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+	protected override async Task OnInitializedAsync()
+	{
+		await FindOutAboutUser();
+	}
+
+	[CascadingParameter]
+	private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+	bool Admin = false;
+	bool Guess = true;
+	string user = "";
+	public void Logout()
+	{
+		((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLogout();
+	}
+
+	private async Task FindOutAboutUser()
+	{
+
+		var user = (await authenticationStateTask).User;
+
+		if (user.IsInRole("Cliente"))
+		{
+			Admin = false;
+			Guess = false;
+			string u = user.Identity.Name;
+
+
+		}
+		else if (user.IsInRole("Admin"))
+		{
+			Guess = false;
+			Admin = true;
+
+		}
+
+
+	}
+
+}

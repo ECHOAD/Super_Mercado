@@ -1,0 +1,41 @@
+﻿@page "/Usuario/Configuracion"
+@inherits ConfigUsuarioComponentBase
+
+
+<MudItem xs="7">
+	<MudText Typo="Typo.h5" GutterBottom="true">Direccion del pago</MudText>
+	<EditForm Model="mDireccionUsuario">
+		<MudGrid>
+			<MudItem xs="12">
+				<MudTextField T="string" Label="Correo" />
+			</MudItem>
+			<MudItem xs="12">
+				<MudTextField T="string" Label="Telefono" />
+			</MudItem>
+			<MudItem xs="6">
+				<MudTextField T="string" Label="Nombre" />
+			</MudItem>
+			<MudItem xs="6">
+				<MudTextField T="string" Label="Apellido" />
+			</MudItem>
+			<MudItem xs="12">
+				<MudTextField T="string" Label="Direccion" />
+			</MudItem>
+			<MudItem xs="6">
+				<MudTextField T="string" Label="Codigo Postal" />
+			</MudItem>
+			<MudItem xs="6">
+				<MudTextField T="string" Label="Area Postal" />
+			</MudItem>
+			<MudItem xs="12" Class="d-flex justify-center">
+				<MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Confirmar Pago</MudButton>
+			</MudItem>
+		</MudGrid>
+	</EditForm>
+
+</MudItem>
+@code {
+
+
+
+}

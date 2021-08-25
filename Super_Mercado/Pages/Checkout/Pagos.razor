@@ -1,0 +1,70 @@
+﻿@page "/pago"
+@inherits PagoComponentBase
+
+
+
+
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center">
+	<h2>DETALLE DE ORDEN</h2>
+</MudItem>
+
+
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+	<MudGrid Spacing="6" Class="mt-16">
+		<MudItem xs="7">
+			<MudText Typo="Typo.h5" GutterBottom="true">Seleccione la direccion de la orden</MudText>
+
+		</MudItem>
+		<MudItem xs="5">
+			<MudText Typo="Typo.h5" GutterBottom="true">Carrito</MudText>
+			<MudPaper Class="d-flex flex-column" Style="height:100%;" Outlined="true">
+				<MudList Clickable="true">
+
+					@if (productosEnCart == null)
+					{
+						<MudListItem Icon="@Icons.Material.Filled.PanoramaFishEye">
+							<div class="d-flex">
+								<MudText>No hay Productos Registrados </MudText>
+							</div>
+						</MudListItem>
+
+
+					}
+					else
+					{
+						foreach (var i in productosEnCart)
+						{
+							<MudListItem>
+								<div class="d-flex">
+									<RadzenImage Path="@i.Imagen" Style="width: 40px; height: 40px; border-radius: 8px; " />
+									<MudText>@i.Nombre</MudText>
+									<MudText Class="ml-auto m-2">@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}",i.Precio)</MudText>
+								</div>
+							</MudListItem>
+
+						}
+
+					}
+
+
+
+				</MudList>
+				<div class="mt-auto">
+					<MudDivider />
+					<div class="d-flex pa-4">
+						<MudText>Total:</MudText>
+						<MudText Class="ml-auto"><b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}",Sum)</b></MudText>
+					</div>
+				</div>
+			</MudPaper>
+		</MudItem>
+	</MudGrid>
+</MudContainer>
+
+@code {
+
+
+
+
+}

@@ -1,0 +1,33 @@
+﻿@page "/authorization"
+@inject IAuthorizationService authorizationService
+
+<h1>Roles and Policy Based Authorization</h1>
+<br />
+<button class="btn btn-primary" @onclick="FindOutAboutUser">Find Out About User</button>
+<br />
+<br />
+<label>Is User a Admin : <b>@IsUserAdmin</b></label>
+<label>Is a Client : <b>@IsUserCliente</b></label>
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    bool IsUserAdmin;
+    bool IsUserCliente;
+
+    private async Task FindOutAboutUser()
+    {       
+        
+        var user = (await authenticationStateTask).User;
+
+        if (user.IsInRole("Admin"))
+            IsUserAdmin = true;
+
+        if ((await authorizationService.AuthorizeAsync(user, "Cliente")).Succeeded)
+            IsUserCliente = true;
+        
+
+    }
+}

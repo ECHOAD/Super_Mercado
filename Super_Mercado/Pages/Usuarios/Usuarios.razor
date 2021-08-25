@@ -1,0 +1,88 @@
+﻿@page "/mantenimiento/usuarios"
+@inherits UsuariosComponent
+@using BlazorInputFile
+
+
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center" >
+<h2 >CONTROL USUARIOS</h2>
+</MudItem>
+
+
+
+<MudItem Class="mt-3">
+
+	
+	<RadzenDataGrid @ref="UsuariosGrid" AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" EditMode="DataGridEditMode.Single"
+					Data="@Usuarios" TItem="Usuario" RowUpdate="@OnUpdateRow">
+		<Columns>
+			<RadzenDataGridColumn TItem="Usuario" Property="Cedula" Title="Cedula">
+				<Template Context="usuario">
+					@usuario.Cedula
+				</Template>
+				<EditTemplate Context="usuario">
+					<RadzenTextBox @bind-Value="usuario.Cedula" Style="width:100%; display: block" Name="Nombre" />
+					<RadzenRequiredValidator Text="La cedula es requerida" Component="Cedula" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Usuario" Property="User" Title="Usuario">
+				<Template Context="usuario">
+					@usuario.User
+				</Template>
+				<EditTemplate Context="usuario">
+					<RadzenTextBox @bind-Value="usuario.User" Style="width:100%; display: block" Name="Nombre" />
+					<RadzenRequiredValidator Text="El Usuario es requerida" Component="Cedula" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Usuario" Property="Cedula" Title="Email">
+				<Template Context="usuario">
+					@usuario.Email
+				</Template>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Usuario" Property="Cedula" Title="Nombre">
+				<Template Context="usuario">
+					@usuario.Nombre
+				</Template>
+				<EditTemplate Context="usuario">
+					<RadzenTextBox @bind-Value="usuario.Nombre" Style="width:100%; display: block" Name="Nombre" />
+					<RadzenRequiredValidator Text="El Nombre es requerida" Component="Nombre" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Usuario" Property="Apellido" Title="Apelldio">
+				<Template Context="usuario">
+					@usuario.Apellido
+				</Template>
+				<EditTemplate Context="usuario">
+					<RadzenTextBox @bind-Value="usuario.Nombre" Style="width:100%; display: block" Name="Nombre" />
+					<RadzenRequiredValidator Text="El Nombre es requerida" Component="Nombre" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+				<RadzenDataGridColumn TItem="Usuario" Property="Roles" Title="Rol">
+				<Template Context="usuario">
+					@usuario.Roles.Role_Desc
+				</Template>
+				<EditTemplate Context="usuario">
+				<RadzenDropDown @bind-Value="usuario.Id_Rol" Data="@Roles" TextProperty="Role_Desc" ValueProperty="Id" Style="width:100%">
+					</RadzenDropDown>
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Usuario" Context="productoAccion" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+				<Template Context="usuario">
+					<RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(usuario))" @onclick:stopPropagation="true">
+					</RadzenButton>
+						<RadzenButton Icon="delete" Size="ButtonSize.Small" Click="@(args => DeleteRow(usuario))" @onclick:stopPropagation="true">
+					</RadzenButton>
+				</Template>
+				<EditTemplate Context="producto">
+					<RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(producto))">
+					</RadzenButton>
+					<RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(producto))">
+					</RadzenButton>
+				</EditTemplate>
+			</RadzenDataGridColumn>
+
+		</Columns>
+	</RadzenDataGrid>
+
+</MudItem>
+

@@ -1,0 +1,67 @@
+﻿@page "/mantenimiento/roles"
+@inherits RolesComponentBase
+@implements IDisposable
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center" >
+<h2 >CONTROL ROLES</h2>
+</MudItem>
+
+
+
+<MudItem>
+
+	<EditForm Model="@mRol" OnSubmit="()=>SaveRol()">
+		<DataAnnotationsValidator />
+		<MudCard>
+			<MudCardContent>
+				<MudTextField Label="Descripcion del Rol" Class="mt-3"
+							  @bind-Value="mRol.Role_Desc" For="@(() => mRol.Role_Desc)" />
+			</MudCardContent>
+			<MudCardActions>
+				<MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-2">@(EditarMode==true?"Editar Rol":"Agregar Rol")</MudButton>
+				@if (EditarMode)
+				{
+					<MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="Variant.Filled" Color="Color.Error" Class="ml-2" OnClick="()=> {EditarMode=false; mRol=new();}">Cancelar</MudButton>
+
+				}
+
+			</MudCardActions>\
+		</MudCard>
+
+	</EditForm>
+
+
+
+</MudItem>
+
+<MudItem>
+	<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" PageSize="5" AllowPaging="true" TItem="Role" Data="Roles">
+		<Columns>
+			<RadzenDataGridColumn TItem="Role" Property="Role_Desc" Filterable="true" Title="Descripcion del Rol" Width="50px" TextAlign="TextAlign.Center" />
+			<RadzenDataGridColumn TItem="Role" Context="rol"  Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+				<Template Context="Rol">
+					<RadzenButton ButtonStyle="ButtonStyle.Success" Icon="edit" Size="ButtonSize.Medium" Click="()=>LoadEditRol(Rol)" @onclick:stopPropagation="true" Disabled="EditarMode">
+					</RadzenButton>
+					<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Click="()=>DeleteRol(Rol.Id)" @onclick:stopPropagation="true" Disabled="EditarMode">
+					</RadzenButton>
+
+				</Template>
+			</RadzenDataGridColumn>
+
+
+		</Columns>
+	</RadzenDataGrid>
+</MudItem>
+
+
+
+
+
+@code {
+
+	public void Dispose()
+	{
+		Console.WriteLine("Authors - Dispose");
+	}
+
+}

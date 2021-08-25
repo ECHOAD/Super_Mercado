@@ -1,0 +1,94 @@
+﻿@page "/login"
+
+@using Super_Mercado.Data
+@using Newtonsoft.Json
+@using System.Security.Claims
+
+
+@inject AuthenticationStateProvider ASP
+@inject NavigationManager NVM
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
+@inject IUsuarioServicio userService
+@inject IJSRuntime jsRunTime
+
+
+
+<MudItem>
+
+    <EditForm Model="@mUsuario" OnSubmit="()=>IniciarSesion()">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Correo" Class="mt-3"
+                              @bind-Value="mUsuario.Email" For="@(() => mUsuario.Email)" />
+                <MudTextField Label="Contraseña" HelperText="Elige una contraseña segura" Class="mt-3"
+                              @bind-Value="mUsuario.Password" For="@(() => mUsuario.Password)" InputType="InputType.Password" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Iniciar Sesion</MudButton>
+            </MudCardActions>
+        </MudCard>
+
+    </EditForm>
+
+
+
+</MudItem>
+
+
+
+
+@code {
+
+    Usuario mUsuario;
+    public string LoginMesssage { get; set; }
+    ClaimsPrincipal claimsPrincipal;
+
+    bool error = false;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        mUsuario = new();
+
+        claimsPrincipal = (await authenticationStateTask).User;
+
+        if (claimsPrincipal.Identity.IsAuthenticated)
+        {
+            NVM.NavigateTo("/index");
+        }
+        {
+           
+            mUsuario.Password = "";
+        }
+
+
+    }
+
+
+
+    private async Task<bool> IniciarSesion()
+    {
+
+        var usuarioConToekn=  await userService.LoginAsync(mUsuario);
+
+        if (usuarioConToekn.Email != null)
+        {
+            await ((CustomAuthenticationStateProvider)ASP).MarkUserAsAuthenticated(usuarioConToekn);
+            NVM.NavigateTo("/index");
+        }
+        else
+        {
+            LoginMesssage = "Invalid username or password";
+        }
+
+        return await Task.FromResult(true);
+    }
+
+
+
+
+}

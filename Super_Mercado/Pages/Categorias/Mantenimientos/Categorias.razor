@@ -1,0 +1,67 @@
+﻿@page "/mantenimiento/categorias"
+@inherits CategoriaComponentsBase
+@implements IDisposable
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center" >
+<h2 >CONTROL CATEGORIA</h2>
+</MudItem>
+
+
+<MudItem>
+
+	<EditForm Model="@mCategoria" OnSubmit="()=>SaveCategoria()">
+		<DataAnnotationsValidator />
+		<MudCard>
+			<MudCardContent>
+				<MudTextField Label="Nombre de la Categoria" Class="mt-3"
+							  @bind-Value="mCategoria.Nombre" For="@(() => mCategoria.Nombre)" />
+			</MudCardContent>
+			<MudCardActions>
+				<MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-2">@(EditarMode==true?"Editar Categoria":"Agregar Categoria")</MudButton>
+				@if (EditarMode)
+				{
+					<MudButton ButtonType="MudBlazor.ButtonType.Button" Variant="Variant.Filled" Color="Color.Error" Class="ml-2" OnClick="()=> {EditarMode=false; mCategoria=new();}">Cancelar</MudButton>
+
+				}
+
+			</MudCardActions>
+		</MudCard>
+
+	</EditForm>
+
+
+
+</MudItem>
+
+<MudItem>
+	<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" PageSize="5" AllowPaging="true" TItem="Categoria" Data="categorias">
+		<Columns>
+			<RadzenDataGridColumn TItem="Categoria" Property="Id" Filterable="true" Title="Id" Frozen="true" Width="50px" TextAlign="TextAlign.Center" />
+			<RadzenDataGridColumn TItem="Categoria" Property="Nombre" Filterable="true" Title="Nombre de Categoria" Width="50px" TextAlign="TextAlign.Center" />
+			<RadzenDataGridColumn TItem="Categoria" Context="Categoria" Title="Acciones" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+				<Template Context="Categoria">
+					<RadzenButton ButtonStyle="ButtonStyle.Success" Icon="edit" Size="ButtonSize.Medium" Click="()=>LoadEditCategoria(Categoria)" @onclick:stopPropagation="true" Disabled="EditarMode">
+					</RadzenButton>
+					<RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Click="()=>DeleteCategoria(Categoria.Id)" @onclick:stopPropagation="true" Disabled="EditarMode">
+					</RadzenButton>
+
+				</Template>
+			</RadzenDataGridColumn>
+
+
+		</Columns>
+	</RadzenDataGrid>
+</MudItem>
+
+
+
+
+
+@code {
+
+	public void Dispose()
+	{
+		Console.WriteLine("Authors - Dispose");
+	}
+
+}

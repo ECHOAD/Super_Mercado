@@ -1,0 +1,97 @@
+﻿@page "/mantenimiento/productos"
+@inherits ProductosComponentBase
+@using BlazorInputFile
+
+
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center">
+	<h2>CONTROL PRODUCTOS</h2>
+</MudItem>
+
+
+
+<MudItem Class="mt-3">
+
+	<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
+	<RadzenDataGrid @ref="productosGrid" AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" EditMode="DataGridEditMode.Single"
+					Data="@productos" TItem="Producto" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+		<Columns>
+			<RadzenDataGridColumn TItem="Producto" Property="Nombre" Title="Nombre">
+				<Template Context="producto">
+					@producto.Nombre
+				</Template>
+
+				<EditTemplate Context="producto">
+					<RadzenTextBox @bind-Value="producto.Nombre" Style="width:100%; display: block" Name="Nombre" />
+					<RadzenRequiredValidator Text="El nombre es requerido" Component="Nombre" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Producto" Property="Precio" Title="Precio">
+				<EditTemplate Context="producto">
+					<RadzenNumeric @bind-Value="producto.Precio" Style="width:100%; display: block" Name="Precio" />
+					<RadzenRequiredValidator Text="El Precio es Requerido" Component="Precio" Popup="true" />
+					<RadzenNumericRangeValidator Text="El precio no puede ser menor que 0" Min="0" Component="Precio" Popup="true" />
+				</EditTemplate>
+				<Template Context="producto">
+					@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", producto.Precio)
+				</Template>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Producto" Property="Stock" Title="Stock">
+				<Template Context="producto">
+					@String.Format( "{0} Elementos", producto.Stock)
+				</Template>
+				<EditTemplate Context="producto">
+					<RadzenNumeric @bind-Value="producto.Stock" Style="width:100%; display: block" Name="STOCK" />
+					<RadzenRequiredValidator Text="El STOCK es Requerido" Component="STOCK" Popup="true" />
+					<RadzenNumericRangeValidator Text="El precio no puede ser menor que 0" Min="0" Component="Precio" Popup="true" />
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Producto" Property="Id_Categoria" Title="Categoria">
+				<Template Context="producto">
+					@producto.Categorias.Nombre
+				</Template>
+
+				<EditTemplate Context="producto">
+					<RadzenDropDown @bind-Value="producto.Id_Categoria" Data="@categorias" TextProperty="Nombre" ValueProperty="Id" Style="width:100%">
+					</RadzenDropDown>
+				</EditTemplate>
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Producto" Property="Photo" Title="Imagen" Filterable="false" Sortable="false">
+				<Template Context="producto">
+
+					<RadzenImage Path="@producto.Imagen" style="width: 160px; height: 120px; border-radius: 8px;"></RadzenImage>
+				</Template>
+				<EditTemplate>
+					<BlazorInputFile.InputFile OnChange="@HandleFileSelection" multiple="false" accept="images/jpeg" />
+				</EditTemplate>
+
+			</RadzenDataGridColumn>
+			<RadzenDataGridColumn TItem="Producto" Property="Detalle" Title="Detalle">
+
+				<EditTemplate Context="producto">
+					<RadzenTextArea Placeholder="Enter here..." Change="(args)=> producto.Detalle=args" />
+				</EditTemplate>
+
+			</RadzenDataGridColumn>
+
+			<RadzenDataGridColumn TItem="Producto" Context="productoAccion" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+				<Template Context="producto">
+					<RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(producto))" @onclick:stopPropagation="true">
+					</RadzenButton>
+					<RadzenButton Icon="delete" Size="ButtonSize.Small" Click="@(args => DeleteRow(producto))" @onclick:stopPropagation="true">
+					</RadzenButton>
+				</Template>
+				<EditTemplate Context="producto">
+					<RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(producto))">
+					</RadzenButton>
+					<RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(producto))">
+					</RadzenButton>
+				</EditTemplate>
+			</RadzenDataGridColumn>
+
+		</Columns>
+	</RadzenDataGrid>
+
+</MudItem>
+
+

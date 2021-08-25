@@ -1,0 +1,79 @@
+﻿@page "/registrarse"
+
+
+@using Super_Mercado.Data
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
+@inject Super_Mercado.Service.IUsuarioServicio userService
+
+
+@using System.ComponentModel.DataAnnotations
+
+<MudItem>
+    <EditForm Model="@mUsuario" OnSubmit="RegistrarUsuario">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+
+                <MudTextField Label="Usuario" HelperText="Max. 8 characters"
+                              @bind-Value="mUsuario.User" For="@(() => mUsuario.User)" />
+                <MudTextField Label="Cedula" HelperText="Max. 8 characters"
+                              @bind-Value="mUsuario.Cedula" For="@(() => mUsuario.Cedula)" />
+                <MudTextField Label="Email" HelperText="Max. 8 characters"
+                              @bind-Value="mUsuario.Email" For="@(() => mUsuario.Email)" />
+
+                <MudTextField Label="Email" HelperText="Ex: 000-000-0000"
+                              @bind-Value="mUsuario.Telefono" For="@(() => mUsuario.Telefono)" />
+
+                <MudTextField Label="Contraseña" HelperText="Elige una contraseña segura" Class="mt-3"
+                              @bind-Value="mUsuario.Password" For="@(() => mUsuario.Password)" InputType="InputType.Password" />
+
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Registrarse</MudButton>
+            </MudCardActions>
+        </MudCard>
+
+    </EditForm>
+</MudItem>
+
+
+@code {
+    Usuario mUsuario = new();
+    public string LoginMesssage { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        mUsuario = new Usuario();
+
+
+        return base.OnInitializedAsync();
+    }
+
+
+
+    private async Task<bool> RegistrarUsuario()
+    {
+        //assume that user is valid
+
+        var returnedUser = await userService.RegisterUserAsync(mUsuario);
+
+        var usuarioConToken = new UsuarioConToken(returnedUser);
+
+        
+
+        if (returnedUser.Email != null)
+        {
+            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(usuarioConToken);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            LoginMesssage = "Invalid username or password";
+        }
+
+        return await Task.FromResult(true);
+    }
+
+}
