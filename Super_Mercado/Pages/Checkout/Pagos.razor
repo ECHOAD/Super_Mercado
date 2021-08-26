@@ -1,5 +1,6 @@
 ﻿@page "/pago"
 @inherits PagoComponentBase
+@inject NavigationManager NVM
 
 
 
@@ -40,15 +41,16 @@
 									<RadzenImage Path="@i.Imagen" Style="width: 40px; height: 40px; border-radius: 8px; " />
 									<MudText>@i.Nombre</MudText>
 									<MudText Class="ml-auto m-2">@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}",i.Precio)</MudText>
+									<a @onclick="()=> DeleteCart(i)">
+										<MudIcon  Icon="@Icons.Rounded.Delete"></MudIcon>
+
+									</a>
 								</div>
 							</MudListItem>
 
 						}
 
 					}
-
-
-
 				</MudList>
 				<div class="mt-auto">
 					<MudDivider />
@@ -57,8 +59,32 @@
 						<MudText Class="ml-auto"><b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}",Sum)</b></MudText>
 					</div>
 				</div>
+				<div class="mt-auto">
+					<MudDivider />
+					<div class="d-flex pa-4">
+						<MudInputLabel>Direccion</MudInputLabel>
+						@if (lst_direcciones != null)
+						{
+
+							<RadzenDropDown Data=lst_direcciones TValue="Int32" TextProperty="Direccion" ValueProperty="Id" Style="width:100%;" Placeholder="Seleccione">
+
+							</RadzenDropDown>
+						}
+						else
+						{
+
+							<MudButton Color="Color.Error" Icon="@Icons.Material.Filled.AppRegistration" OnClick='()=>NVM.NavigateTo("/login")'>Tiene que Iniciar Sesion</MudButton>
+
+						}
+					</div>
+				</div>
 			</MudPaper>
 		</MudItem>
+		<MudItem>
+
+
+		</MudItem>
+
 	</MudGrid>
 </MudContainer>
 

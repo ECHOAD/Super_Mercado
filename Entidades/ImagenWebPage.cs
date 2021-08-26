@@ -17,7 +17,6 @@ namespace Entidades
         public string Titulo { get; set; }
 
         [Column(TypeName = "NVARCHAR(MAX)")]
-        [Required(ErrorMessage = "El {0} es requerido.")]
         public string Path { get; set; }
 
         public string FileName { get; set; }
@@ -26,9 +25,6 @@ namespace Entidades
         public string Comentario { get; set; }
 
 
-
-        [NotMapped]
-        public IFormFile Photo { get; set; }
 
     }
 }

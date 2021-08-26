@@ -8,26 +8,38 @@
 }
 else
 {
-	@foreach (var i in productos)
-	{
-		<MudItem Class="mt-4" sm="12" lg="4">
-			<MudCard Class="">
-				<MudCardMedia Image="@i.Imagen" Height="300" />
-				<MudCardContent>
-					<MudText Typo="Typo.h5">@i.Nombre</MudText>
-					<MudText Typo="Typo.body2">@i.Detalle</MudText>
-				</MudCardContent>
+	<MudItem>
+		<MudContainer>
 
-				<MudCardActions>
-					<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Default" @onclick="()=> AddToCart(i)" />
-					<MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-				</MudCardActions>
-			</MudCard>
-		</MudItem>
+			@foreach (var i in productos)
+			{
 
 
+			
+					<MudCard Class="">
+						<MudCardMedia Image="@i.Imagen" Height="300" />
+						<MudCardContent>
+							<MudText Typo="Typo.h5">@i.Nombre</MudText>
+							<MudText Typo="Typo.body2">@i.Detalle</MudText>
+						</MudCardContent>
 
-	}
+						<MudCardActions>
+							<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Default" @onclick="()=> AddToCart(i)" />
+							<MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+						</MudCardActions>
+					</MudCard>
+
+				
+
+
+
+
+
+			}
+		</MudContainer>
+
+	</MudItem>
+
 
 
 }

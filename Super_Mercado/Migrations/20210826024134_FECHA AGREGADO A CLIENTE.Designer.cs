@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Super_Mercado.Data;
 
 namespace Super_Mercado.Migrations
 {
     [DbContext(typeof(POSDbContext))]
-    partial class POSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210826024134_FECHA AGREGADO A CLIENTE")]
+    partial class FECHAAGREGADOACLIENTE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

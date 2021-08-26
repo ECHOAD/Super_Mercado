@@ -33,7 +33,7 @@ namespace Entidades
 
 
         [MaxLength(100, ErrorMessage = "El campo {0} no puede contener mas de {1} caracteres)")]
-        [Required(ErrorMessage = "La {0} es requerida.")]
+
         public string Email { get; set; }
 
 
@@ -54,15 +54,18 @@ namespace Entidades
         [MaxLength(10, ErrorMessage = "El campo {0} no puede contener mas de {1} caracteres)")]
         public string Telefono { get; set; }
 
-       
+
         public int? Id_Rol { get; set; }
 
         [ForeignKey("Id_Rol")]
-        public Role Roles{ get; set; }
+        public Role Roles { get; set; }
+
+
+        [Column(TypeName = "DATE")]
+        public DateTime? FechaNacimiento { get; set; }
 
 
 
- 
 
 
 

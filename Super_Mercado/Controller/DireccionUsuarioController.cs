@@ -23,7 +23,8 @@ namespace Super_Mercado.Controller
         }
 
 
-        [HttpGet("GetDireccionUsuario/{username}")]
+        [HttpGet("GetDirecciones/{username}")]
+
         public async Task<ActionResult<IEnumerable<UsuarioDireccion>>> GetDirecciones(string username)
         {
 
@@ -54,14 +55,15 @@ namespace Super_Mercado.Controller
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("CreateUsuarioDireccion")]
+
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostCategoria(string username, UsuarioDireccion direccion)
+        public async Task<IActionResult> PostCategoria(UsuarioDireccion direccion)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var oUser = await _context.Usuarios.FirstOrDefaultAsync(x => x.User == username);
+                    var oUser = await _context.Usuarios.FirstOrDefaultAsync(x => x.User == direccion.Usuarios.User);
 
                     if (oUser == null)
                     {
@@ -88,7 +90,7 @@ namespace Super_Mercado.Controller
 
         [HttpPut("UpdateDireccionUsuario/{id}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> PutCategoria(int? id, UsuarioDireccion usuarioDireccion)
+        public async Task<IActionResult> PutDireccionUsuario(int? id, UsuarioDireccion usuarioDireccion)
         {
 
             if (id == null)

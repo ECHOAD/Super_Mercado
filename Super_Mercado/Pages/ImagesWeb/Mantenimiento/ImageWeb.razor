@@ -1,0 +1,55 @@
+﻿@page "/mantenimiento/ImagenWebPages"
+@inherits ImageWebComponentBase
+@using BlazorInputFile
+
+
+
+<MudItem Class="mt-3" sm="12" Style="text-align:center">
+	<h2>CONTROL SLIDER</h2>
+</MudItem>
+
+	<MudItem Class="mt-3">
+
+		<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@InsertRow" />
+		<RadzenDataGrid @ref="imagenesGrid" AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" EditMode="DataGridEditMode.Single"
+						Data="@imagenes" TItem="ImagenWebPage" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+			<Columns>
+				<RadzenDataGridColumn TItem="ImagenWebPage" Property="Titulo" Title="Titulo">
+					<Template Context="ImagenWebPage">
+						@ImagenWebPage.Titulo
+					</Template>
+					<EditTemplate Context="ImagenWebPage">
+						<RadzenTextBox @bind-Value="ImagenWebPage.Titulo" Style="width:100%; display: block" Name="Nombre" />
+						<RadzenRequiredValidator Text="El Titulo es requerido" Component="Nombre" Popup="true" />
+					</EditTemplate>
+				</RadzenDataGridColumn>
+				<RadzenDataGridColumn TItem="ImagenWebPage" Property="Photo" Title="Imagen" Filterable="false" Sortable="false">
+					<Template Context="ImagenWebPage">
+						<RadzenImage Path="@ImagenWebPage.Path" style="width: 700px; height:400px; border-radius: 8px;"></RadzenImage>
+					</Template>
+					<EditTemplate>
+						<BlazorInputFile.InputFile OnChange="@HandleFileSelection" multiple="false" accept="images/jpeg" />
+					</EditTemplate>
+				</RadzenDataGridColumn>
+				<RadzenDataGridColumn TItem="ImagenWebPage" Context="productoAccion" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+					<Template Context="ImagenWebPage">
+						<RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(ImagenWebPage))" @onclick:stopPropagation="true">
+						</RadzenButton>
+						<RadzenButton Icon="delete" Size="ButtonSize.Small" Click="@(args => DeleteRow(ImagenWebPage))" @onclick:stopPropagation="true">
+						</RadzenButton>
+					</Template>
+					<EditTemplate Context="ImagenWebPage">
+						<RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(ImagenWebPage))">
+						</RadzenButton>
+						<RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(ImagenWebPage))">
+						</RadzenButton>
+					</EditTemplate>
+				</RadzenDataGridColumn>
+
+
+			</Columns>
+		</RadzenDataGrid>
+
+	</MudItem>
+
+

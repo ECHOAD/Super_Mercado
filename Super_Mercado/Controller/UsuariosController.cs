@@ -59,18 +59,18 @@ namespace Super_Mercado.Controller
             var lst = await _context.Usuarios.Include(x => x.Roles).Select(
                 u => new Usuario
                 {
-                    Id=u.Id,
-                    User=u.User,
-                    Cedula=u.Cedula,
-                    Nombre=u.Nombre,
-                    Apellido=u.Apellido,
-                    Email=u.Email,
-                    Id_Rol=u.Id_Rol,
-                    Roles=u.Roles,
-                    Telefono=u.Telefono
-                    
+                    Id = u.Id,
+                    User = u.User,
+                    Cedula = u.Cedula,
+                    Nombre = u.Nombre,
+                    Apellido = u.Apellido,
+                    Email = u.Email,
+                    Id_Rol = u.Id_Rol,
+                    Roles = u.Roles,
+                    Telefono = u.Telefono
+
                 }).ToListAsync();
-        
+
             return lst;
 
         }
@@ -96,6 +96,27 @@ namespace Super_Mercado.Controller
                 user.Roles = rol;
 
 
+            }
+            else
+            {
+                var exist = await _context.Roles.FirstOrDefaultAsync(x => x.Role_Desc == "Cliente");
+
+                if (exist == null)
+                {
+
+                    await _context.Roles.AddAsync(new Role { Role_Desc = "Cliente" });
+
+                }
+
+
+                var rol = await _context.Roles.Where(x => x.Role_Desc == "Cliente").FirstOrDefaultAsync();
+
+                if (rol != null)
+                {
+                    user.Id_Rol = rol.Id;
+                    user.Roles = rol;
+
+                }
             }
 
             _context.Usuarios.Add(user);

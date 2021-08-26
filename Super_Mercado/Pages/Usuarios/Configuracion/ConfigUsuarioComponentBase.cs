@@ -39,7 +39,7 @@ namespace Super_Mercado.Pages.Usuarios.Configuracion
         protected bool EditarMode = false;
 
 
-        private string _username = "";
+        protected string _username = "";
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -54,7 +54,7 @@ namespace Super_Mercado.Pages.Usuarios.Configuracion
             }
         }
 
-        protected async void LoadEditCategoria(UsuarioDireccion usuarioDireccion)
+        protected  void LoadEditDireccion(UsuarioDireccion usuarioDireccion)
         {
 
 
@@ -66,6 +66,7 @@ namespace Super_Mercado.Pages.Usuarios.Configuracion
             {
                 EditarMode = true;
             }
+           
 
         }
 
@@ -98,18 +99,33 @@ namespace Super_Mercado.Pages.Usuarios.Configuracion
                     }
                 }
             }
+            try
+            {
+                direcciones = await SuperMercadoServicio.GetAllAsync($"DireccionUsuario/GetDirecciones/{_username}");
 
-            direcciones = await SuperMercadoServicio.GetAllAsync($"DireccionUsuario/GetDireccionUsuario/?usuario={_username}");
+
+            }
+            catch (Exception)
+            {
+
+            }
+
         }
 
-        protected async Task SaveCategoria()
+        protected async Task SaveUsuarioDireccion()
         {
-            //if (mCategoria.Id == 0)
-            //    await SuperMercadoServicio.SaveAsync("Categorias/CreateCategoria", mCategoria);
-            //else
-            //    await SuperMercadoServicio.UpdateAsync("Categorias/UpdateCategoria/", mCategoria.Id, mCategoria);
+            mDireccionUsuario.Usuarios = new();
 
-            //await LoadCategorias();
+            mDireccionUsuario.Usuarios.User = _username;
+
+
+
+            if (mDireccionUsuario.Id == 0)
+                await SuperMercadoServicio.SaveAsync($"DireccionUsuario/CreateUsuarioDireccion/", mDireccionUsuario);
+            else
+                await SuperMercadoServicio.UpdateAsync("DireccionUsuario/UpdateCategoria/", mDireccionUsuario.Id, mDireccionUsuario);
+
+            await LoadDirecciones();
         }
 
         protected async Task DeleteCategoria(int? id)

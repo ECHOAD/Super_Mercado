@@ -58,7 +58,7 @@
 
         if (claimsPrincipal.Identity.IsAuthenticated)
         {
-            NVM.NavigateTo("/index");
+            NVM.NavigateTo("/");
         }
         {
            
@@ -78,7 +78,7 @@
         if (usuarioConToekn.Email != null)
         {
             await ((CustomAuthenticationStateProvider)ASP).MarkUserAsAuthenticated(usuarioConToekn);
-            NVM.NavigateTo("/index");
+            NVM.NavigateTo("/");
         }
         else
         {

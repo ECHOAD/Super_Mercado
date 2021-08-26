@@ -15,18 +15,14 @@ using System.IO;
 using System.Net.Http;
 using BlazorInputFile;
 
-namespace Super_Mercado.Pages.Productos.Mantenimiento
+namespace Super_Mercado.Pages.ImagesWeb.Mantenimiento
 {
-    public class ProductosComponentBase : ComponentBase
+    public class ImageWebComponentBase : ComponentBase
     {
 
         [Inject] public IUsuarioServicio usuarioServicio { get; set; }
 
-
-        [Inject] public ISuperMercadoService<Producto> SuperMercadoServicioProductos { get; set; }
-        [Inject] public ISuperMercadoService<Categoria> SuperMercadoServicioCategoria { get; set; }
-
-
+        [Inject] public ISuperMercadoService<ImagenWebPage> SuperMercadoServicioProductos { get; set; }
 
         [Inject] public ILocalStorageService localStorageService { get; set; }
 
@@ -37,9 +33,8 @@ namespace Super_Mercado.Pages.Productos.Mantenimiento
 
 
 
-        protected RadzenDataGrid<Producto> productosGrid;
-        protected List<Producto> productos;
-        protected List<Categoria> categorias;
+        protected RadzenDataGrid<ImagenWebPage> imagenesGrid;
+        protected List<ImagenWebPage> imagenes;
         private byte[] _filebytes;
         private IFileListEntry file;
 
@@ -59,9 +54,9 @@ namespace Super_Mercado.Pages.Productos.Mantenimiento
         }
 
 
-        protected void EditRow(Producto order)
+        protected void EditRow(ImagenWebPage img)
         {
-            productosGrid.EditRow(order);
+            imagenesGrid.EditRow(img);
         }
 
 
@@ -89,74 +84,61 @@ namespace Super_Mercado.Pages.Productos.Mantenimiento
         }
         protected async Task LoadData()
         {
-            productos = await SuperMercadoServicioProductos.GetAllAsync("Productos/GetProductos");
-
-            categorias = await SuperMercadoServicioCategoria.GetAllAsync("Categorias/GetCategorias");
+            imagenes = await SuperMercadoServicioProductos.GetAllAsync("ImagesWeb/GetImages");
         }
 
-        protected void SaveRow(Producto producto)
+        protected void SaveRow(ImagenWebPage img)
         {
-            productosGrid.UpdateRow(producto);
+            imagenesGrid.UpdateRow(img);
         }
 
-        protected void CancelEdit(Producto producto)
+        protected void CancelEdit(ImagenWebPage img)
         {
 
-            productosGrid.CancelEditRow(producto);
-
-
+            imagenesGrid.CancelEditRow(img);
 
         }
 
-
-
-
-        protected async void DeleteRow(Producto producto)
+        protected async void DeleteRow(ImagenWebPage img)
         {
-            await SuperMercadoServicioProductos.DeleteAsync("Producto/DeleteProducto", producto.Id);
+            await SuperMercadoServicioProductos.DeleteAsync("ImagesWeb/DeleteImage/", img.Id);
+
+            await OnInitializedAsync();
         }
 
         protected void InsertRow()
         {
 
-            var producto = new Producto();
-            producto.Categorias = new Categoria();
-            productosGrid.InsertRow(producto);
+            var producto = new ImagenWebPage();
 
-
-
-          
+            imagenesGrid.InsertRow(producto);
         }
 
-        private async Task SaveProducto(Producto producto)
+        private async Task SaveImagen(ImagenWebPage img)
         {
 
 
 
-            if (file is not null || producto.Id != 0)
+            if (file is not null || img.Id != 0)
             {
 
 
 
-                if (file is not null )
+                if (file is not null)
                 {
                     var path = "";
 
 
                     var extension = System.IO.Path.GetExtension(file.Name);
 
-                    if (!Directory.Exists($"{_host.WebRootPath}/Images/Productos"))
+                    if (!Directory.Exists($"{_host.WebRootPath}/Images/ImagenesWeb"))
                     {
 
-                        Directory.CreateDirectory($"{_host.WebRootPath}/Images/Productos");
-
-
-
-
+                        Directory.CreateDirectory($"{_host.WebRootPath}/Images/ImagenesWeb");
 
                     }
 
-                    path = $"{_host.WebRootPath}/Images/Productos/Producto_{producto.Nombre}{extension}";
+                    path = $"{_host.WebRootPath}/Images/ImagenesWeb/Img_{img.Titulo}{extension}";
 
 
                     var fileStream = new FileStream(path, FileMode.Create);
@@ -165,37 +147,31 @@ namespace Super_Mercado.Pages.Productos.Mantenimiento
                     fileStream.Write(_filebytes, 0, _filebytes.Length);
 
 
-
-
-                    producto.Imagen = path;
+                    img.Path = path;
 
 
                 }
-
-
 
 
 
                 //producto.Categorias= await SuperMercadoServicioCategoria.GetByIdAsync("Categorias/GetCategoria/", producto.Id_Categoria);
 
 
-                if (producto.Id == 0)
+                if (img.Id == 0)
                 {
 
 
-                    await SuperMercadoServicioProductos.SaveAsync("Productos/CreateProducto", producto);
+                    await SuperMercadoServicioProductos.SaveAsync("ImagesWeb/CreateImage", img);
 
                 }
                 else
                 {
 
 
-                    await SuperMercadoServicioProductos.UpdateAsync("Productos/UpdateProducto/", producto.Id, producto);
+                    await SuperMercadoServicioProductos.UpdateAsync("ImagesWeb/UpdateImage/", img.Id, img);
 
                 }
 
-
-                await OnInitializedAsync();
             }
 
 
@@ -223,15 +199,15 @@ namespace Super_Mercado.Pages.Productos.Mantenimiento
 
 
 
-        protected async void OnCreateRow(Producto producto)
+        protected async void OnCreateRow(ImagenWebPage producto)
         {
-            await SaveProducto(producto);
+            await SaveImagen(producto);
 
         }
 
-        protected async void OnUpdateRow(Producto producto)
+        protected async void OnUpdateRow(ImagenWebPage producto)
         {
-            await SaveProducto(producto);
+            await SaveImagen(producto);
 
         }
     }

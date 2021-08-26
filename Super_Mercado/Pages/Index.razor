@@ -1,33 +1,72 @@
 ﻿@page "/"
+@inject ISuperMercadoService<ImagenWebPage> servicioImagenes
 
-<MudCarousel @ref="_carousel" ItemsSource="@_source" Style="height:200px;" ShowArrows="@_arrows" ShowDelimiters="@_delimiters" AutoCycle="@_autocycle">
-    <ItemTemplate>
-        <div class="d-flex flex-column flex-column justify-center" style="height:100%">
-            <MudIcon Class="mx-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-            <MudText Align="@Align.Center" Class="mx-auto">@context</MudText>
-        </div>
-    </ItemTemplate>
-</MudCarousel>
 
-<br />
+
+
+
+@if (lst_imagen == null)
+{
+
+}
+else
+{
+	<MudContainer MaxWidth=MaxWidth.Medium>
+
+
+
+		<MudItem Class="mt-3">
+			<MudCarousel @ref="_carousel" ItemsSource="@lst_imagen" Style="height:600px;" ShowArrows="true" ShowDelimiters="true" AutoCycle="true" AutoCycleTime="System.TimeSpan.FromSeconds(5)">
+				<ItemTemplate>
+					<div class="d-flex flex-column flex-column justify-center" style="height:100%">
+						<RadzenImage Path="@context.Path"></RadzenImage>
+					</div>
+				</ItemTemplate>
+			</MudCarousel>
+		</MudItem>
+	</MudContainer>
+
+}
+
+
+	
+
+
+
 
 
 
 <AuthorizeView>
-    <Authorized>
-        PIPI
-    </Authorized>
-    <NotAuthorized>
-        AY BOBO
 
-    </NotAuthorized>
+
+	<Authorized>
+		PIPI
+	</Authorized>
+	<NotAuthorized>
+		AY BOBO
+
+	</NotAuthorized>
 
 </AuthorizeView>
 
 @code {
-    private MudCarousel<string> _carousel;
-    private bool _arrows = true;
-    private bool _delimiters = true;
-    private bool _autocycle = true;
-    private IList<string> _source = new List<string>() { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+	private MudCarousel<ImagenWebPage> _carousel;
+
+
+
+
+
+	private List<ImagenWebPage> lst_imagen { get; set; }
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		lst_imagen = await servicioImagenes.GetAllAsync("ImagesWeb/GetImages");
+
+
+
+	}
+
+
+
 }
